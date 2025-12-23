@@ -1,0 +1,28 @@
+enable secret cisco123
+ip http server
+
+aaa new-model
+aaa authentication login default local
+aaa authorization network default local
+
+dot11 guest
+ username NECS password NECS lifetime 0
+
+ip admission name web_auth proxy http
+ip admission name web_auth method-list authentication default
+
+dot11 ssid Guest
+ authentication open
+ web-auth
+ guest-mode
+
+interface dot11radio 0
+ ssid Guest
+ ip admission web_auth
+ no shutdown
+
+interface BVI1
+ ip address 192.168.10.10 255.255.255.0
+ no shutdown
+
+username LAB01 password 1234
